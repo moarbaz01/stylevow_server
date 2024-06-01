@@ -3,7 +3,8 @@ const jwt = require("jsonwebtoken");
 // Lets start to create all middlewares here that are related to authentication and authorization
 exports.verifyUser = async (req, res, next) => {
   try {
-    const token = req.headers.authorization.replace("Bearer ", "");
+    const token =
+      req.headers.authorization.replace("Bearer ", "") || req.cookies.token;
     // Split token in the headers
     if (!token) {
       return res.status(500).json({

@@ -6,8 +6,10 @@ require("./config/cloudinary")();
 const bodyParser = require("body-parser");
 const multer = require('multer');
 const cors = require("cors");
-
 const app = express();
+// Cookie parser
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -23,7 +25,7 @@ const upload = multer({ storage: storage });
 app.use(bodyParser.json());
 app.use(cors(
   {
-    origin: "http://localhost:3000",
+    origin: "*",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
   }
