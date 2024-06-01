@@ -72,17 +72,17 @@ exports.create = async (req, res) => {
             <ul>
                 ${products
                   .map(
-                    (product) =>
-                      `<li>${product.name} - ${product.quantity} x ${
-                        product.price
-                      } = ${product.quantity * product.price}</li>`
+                    (cart) =>
+                      `<li>${cart.product.name} - ${cart.quantity} x ${
+                        cart.product.price
+                      }₹ = ${cart.quantity * cart.product.price}₹</li>`
                   )
                   .join("")}
             </ul>
-            <p>Total Amount: ${totalAmount}</p>
+            <p>Total Amount: ${totalAmount}₹</p>
             <p>Payment Method: ${paymentMethod}</p>
             <p>Shipping Address: ${shippingAddress}</p>
-            <p>Promocode: ${promocode}</p>
+            <p>Promocode: ${promocode || "No Promocode"}</p>
             <p>Order ID: ${order._id}</p>
             <p>Thank you for shopping with us!</p>
         `
