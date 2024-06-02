@@ -75,9 +75,11 @@ const userSchema = new mongoose.Schema(
     ],
     token: {
       type: String,
+      default: null,
     },
     resetToken: {
       type: String,
+      default: null,
     },
     role: {
       type: String,
@@ -88,9 +90,5 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-userSchema.index(
-  { resetToken: 1 },
-  { expireAfterSeconds: 5 * 60, unique: false }
-);
 
 module.exports = mongoose.model("User", userSchema);

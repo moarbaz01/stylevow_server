@@ -175,7 +175,7 @@ exports.login = async (req, res) => {
   try {
     // Fetched
     const { email, password } = req.body;
-    console.log(email)
+    console.log(email);
     if (!email || !password) {
       return res.status(500).json({
         success: false,
@@ -184,7 +184,31 @@ exports.login = async (req, res) => {
     }
 
     // Check is user exist or not
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email })
+      .populate({
+        path: "order",
+        populate: {
+          path: "shippingAddress",
+        },
+        populate: {
+          path: "products",
+        },
+      })
+      .populate({
+        path: "cart",
+        populate: {
+          path: "product", // Populate the 'product' field within the 'cart' documents
+        },
+      })
+      .populate({
+        path: "reviews",
+        populate: {
+          path: "user",
+        },
+      })
+      .populate("wishlist")
+      .populate("cards")
+      .populate("address");
     if (!user) {
       return res.status(500).json({
         success: false,
@@ -222,18 +246,37 @@ exports.login = async (req, res) => {
     );
 
     res
-      .cookie("token", token, { maxAge: 7 * 24 * 60 * 60 * 1000 })
       .status(200)
       .json({
         success: true,
         message: "USER SUCCESSFULLY LOGIN",
-        user: user,
+        user,
       });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).json({
       success: false,
       message: "ERROR IN LOGIN USER",
+      error: error.message,
+    });
+  }
+};
+
+exports.logout = async (req, res) => {
+  try {
+    const id = req.user.userId;
+    const user = await User.findById(id);
+    user.token = null;
+    await user.save();
+    
+    res.status(200).json({
+      success: true,
+      message: "LOGGED OUT SUCCESSFULLY",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "ERROR IN LOGOUT USER",
       error: error.message,
     });
   }
