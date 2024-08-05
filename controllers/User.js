@@ -245,13 +245,11 @@ exports.login = async (req, res) => {
       `
     );
 
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: "USER SUCCESSFULLY LOGIN",
-        user,
-      });
+    res.status(200).json({
+      success: true,
+      message: "USER SUCCESSFULLY LOGIN",
+      user,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -268,7 +266,7 @@ exports.logout = async (req, res) => {
     const user = await User.findById(id);
     user.token = null;
     await user.save();
-    
+
     res.status(200).json({
       success: true,
       message: "LOGGED OUT SUCCESSFULLY",
@@ -376,6 +374,21 @@ exports.getUsers = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "ERROR IN USER FETCH",
+      error: error.message,
+    });
+  }
+};
+
+exports.checkServer = async (req, res) => {
+  try {
+    res.status(200).json({
+      success: true,
+      message: "Server is running",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Server is not running",
       error: error.message,
     });
   }

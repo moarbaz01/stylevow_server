@@ -8,6 +8,7 @@ const {
   getUser,
   getUsers,
   logout,
+  checkServer,
 } = require("../controllers/User");
 const { verifyUser, isAdmin } = require("../middlewares/auth");
 
@@ -15,7 +16,8 @@ const { verifyUser, isAdmin } = require("../middlewares/auth");
 Router.post("/otp", sendOTP);
 Router.post("/signup", signup);
 Router.post("/login", login);
-Router.delete("/logout",verifyUser, logout);
+Router.delete("/logout", verifyUser, logout);
+Router.get("/check", checkServer);
 
 // ADMIN ROUTES
 Router.get("/user", verifyUser, getUser);
